@@ -70,7 +70,7 @@ app.on('ready', () => {
   createWindow()
 })
 
-if (isDev) {
+if (!isDev) {
   app.setLoginItemSettings({
     openAtLogin: true,
     args: [__dirname]
