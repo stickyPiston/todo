@@ -1,0 +1,53 @@
+/* General styles */
+
+html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Bold.otf") format('opentype');
+}
+
+/* Nav styles */
+
+nav > p {
+  margin: 5px 0 5px 0;
+  text-align: center;
+  font-family: Montserrat;
+  font-weight: bold;
+}
+
+/* Todo list styles */
+
+ul {
+  list-style-type: none;
+}
+
+ul > li {
+  width: 100%;
+  margin: 10px 0px 10px 0px;
+}
+
+ul > li > input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+ul > li > button.delete {
+  float: right;
+  margin-right: 20px;
+}
+
+/* Add input styles */
+
+form {
+  display: block;
+  margin: 0 auto;
+  width: 300px;
+}
+
+form > input[type="text"] {
+  width: 200px;
+}
