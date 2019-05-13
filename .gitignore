@@ -65,3 +65,6 @@ ts-gen
 
 # Used to accelerate CI builds
 .depshash
+
+# Ignore save file
+src/save.json
