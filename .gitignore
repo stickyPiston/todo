@@ -68,3 +68,5 @@ ts-gen
 
 # Ignore save file
 src/save.json
+
+electron-builder.yml
