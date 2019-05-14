@@ -56,6 +56,7 @@ spec/.hash
 
 # Eslint Cache
 .eslintcache
+.eslintrc.json
 
 # Generated native addon files
 /spec/fixtures/native-addon/echo/build/
