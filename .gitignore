@@ -68,6 +68,6 @@ ts-gen
 .depshash
 
 # Ignore save file
-src/save.json
+/src/save.json
 
 electron-builder.yml
