@@ -1,16 +1,22 @@
 const fs = require('fs')
 const path = require('path')
 const { ipcRenderer } = require('electron')
+const showdown = require('showdown')
+var converter = new showdown.Converter({
+  simplifiedAutoLink: true,
+  excludeTrailingPunctuationFromURLs: true,
+  strikethrough: true,
+  ghMentions: true
+})
 
 var input = document.getElementById('input')
 var list = document.getElementById('list')
 
-function createItem (text, done) {
+function createItem (text, done, isHTML) {
   var newNode = document.createElement('li')
   var spanNode = document.createElement('span')
   var checkboxNode = document.createElement('input')
   checkboxNode.setAttribute('type', 'checkbox')
-  var textNode = document.createTextNode(text)
   var separator = document.createElement('span')
   var separatorTextNode = document.createTextNode(' ')
 
@@ -28,7 +34,7 @@ function createItem (text, done) {
     SaveList()
   })
 
-  spanNode.appendChild(textNode)
+  spanNode.innerHTML = isHTML ? text : converter.makeHtml(text)
 
   checkboxNode.setAttribute('title', 'Check this to mark an item as done')
   checkboxNode.addEventListener('click', e => {
@@ -51,7 +57,7 @@ function ListSave () {
   var save = fs.readFileSync(path.join(__dirname, 'save.json'))
   save = JSON.parse(save.toString())
   save.forEach(element => {
-    createItem(element.data, element.done)
+    createItem(element.data, element.done, true)
   })
 }
 
@@ -60,7 +66,7 @@ function SaveList () {
 
   Array.from(document.querySelectorAll('li > span:not(.seperator)')).forEach(element => {
     var done = element.parentElement.style.textDecoration === 'line-through'
-    data.push({ 'data': element.innerText, 'done': done })
+    data.push({ 'data': element.innerHTML, 'done': done })
   })
 
   data = JSON.stringify(data)
@@ -76,19 +82,24 @@ function EmptyList () {
   list.innerHTML = ''
 }
 
+// If form is submitted
 document.getElementsByTagName('form')[0].addEventListener('submit', e => {
   e.preventDefault()
   EmptyList()
 
-  // Amend the save.json file as well.
+  // List the current save.json
   ListSave()
 
+  // Convert input value to html and add it to the list
   createItem(input.value)
 
+  // Update height
   ipcRenderer.send('heightChanged', document.getElementsByTagName('li').length)
 
+  // Empty input
   input.value = ''
 
+  // Amend the save.json file
   SaveList()
 })
 

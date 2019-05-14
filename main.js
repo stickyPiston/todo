@@ -37,6 +37,18 @@ function createWindow () {
           }
         }
       ]
+    },
+    {
+      label: 'Window',
+      submenu: [
+        {
+          label: 'Reload Window',
+          accelerator: 'CommandOrControl+R',
+          click () {
+            win.reload()
+          }
+        }
+      ]
     }
   ])
   Menu.setApplicationMenu(menu)

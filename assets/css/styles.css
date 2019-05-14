@@ -11,6 +11,12 @@ html, body {
     src: url("../fonts/Montserrat-Bold.otf") format('opentype');
 }
 
+p {
+  margin: 0;
+  display: inline-block;
+  text-decoration: inherit;
+}
+
 /* Nav styles */
 
 nav > p {
@@ -29,6 +35,10 @@ ul {
 ul > li {
   width: 100%;
   margin: 10px 0px 10px 0px;
+}
+
+ul > li > span {
+  text-decoration: inherit;
 }
 
 ul > li > input[type="checkbox"] {
