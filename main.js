@@ -1,12 +1,6 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const isDev = require('electron-is-dev')
-
-// Auto-updater
-if (!isDev) {
-  require('update-electron-app')({
-    repo: 'stickyPiston/todo'
-  })
-}
+const { autoUpdater } = require('electron-updater')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -75,6 +69,15 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
+  autoUpdater.checkForUpdates()
+})
+
+autoUpdater.on('update-downloaded', (info) => {
+  win.webContents.send('updateReady')
+})
+
+ipcMain.on('quitAndInstall', (event, arg) => {
+  autoUpdater.quitAndInstall()
 })
 
 if (!isDev) {

@@ -1,14 +1,16 @@
 {
   "name": "todo",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Quick todo app",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "build --win",
+    "ship": "build --win -p always"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/stickyPiston/todo.git"
+    "url": "https://github.com/stickyPiston/todo"
   },
   "keywords": [
     "todo"
@@ -18,9 +20,11 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "electron": "^5.0.1",
+    "electron-updater": "^4.0.6",
     "update-electron-app": "^1.3.0"
   },
   "devDependencies": {
+    "electron-builder": "^20.40.2",
     "electron-is-dev": "^1.1.0",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
