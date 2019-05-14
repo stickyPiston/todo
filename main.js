@@ -69,21 +69,21 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  autoUpdater.checkForUpdates()
-})
-
-autoUpdater.on('update-downloaded', (info) => {
-  win.webContents.send('updateReady')
-})
-
-ipcMain.on('quitAndInstall', (event, arg) => {
-  autoUpdater.quitAndInstall()
+  if (!isDev) autoUpdater.checkForUpdates()
 })
 
 if (!isDev) {
   app.setLoginItemSettings({
     openAtLogin: true,
     args: [__dirname]
+  })
+
+  autoUpdater.on('update-downloaded', (info) => {
+    win.webContents.send('updateReady')
+  })
+
+  ipcMain.on('quitAndInstall', (event, arg) => {
+    autoUpdater.quitAndInstall()
   })
 }
 
