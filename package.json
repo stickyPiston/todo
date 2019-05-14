@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "build --win",
-    "ship": "build --win -p always"
+    "build": "build --win --mac",
+    "ship": "build --win --mac -p always"
   },
   "repository": {
     "type": "git",
