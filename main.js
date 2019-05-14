@@ -1,6 +1,13 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const isDev = require('electron-is-dev')
 
+// Auto-updater
+if (!isDev) {
+  require('update-electron-app')({
+    repo: 'stickyPiston/todo'
+  })
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
