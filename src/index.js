@@ -106,10 +106,3 @@ document.getElementsByTagName('form')[0].addEventListener('submit', e => {
 ListSave()
 
 ipcRenderer.send('heightChanged', document.getElementsByTagName('li').length)
-
-ipcRenderer.on('updateReady', function (event, text) {
-  // changes the text of the button
-  var container = document.getElementById('ready')
-  container.disabled = false
-  container.innerHTML = 'new version ready!'
-})

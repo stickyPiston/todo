@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "build --win --mac",
+    "build": "build --mac",
     "ship": "build --win --mac -p always"
   },
   "repository": {
@@ -18,14 +18,10 @@
   "author": "Jobbel.nl",
   "license": "ISC",
   "dependencies": {
-    "auto-launch": "^5.0.5",
     "electron-is-dev": "^1.1.0",
-    "electron-updater": "^4.0.6",
-    "showdown": "^1.9.0",
-    "update-electron-app": "^1.3.0"
+    "showdown": "^1.9.0"
   },
   "devDependencies": {
-    "electron-builder": "^20.40.2",
     "electron": "^5.0.1",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
