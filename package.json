@@ -1,12 +1,10 @@
 {
   "name": "todo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Quick todo app",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "build --mac",
-    "ship": "build --win --mac -p always"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",

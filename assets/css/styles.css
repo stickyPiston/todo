@@ -20,8 +20,9 @@ p {
 /* Nav styles */
 
 nav > p {
-  margin: 5px 0 5px 0;
-  text-align: center;
+  display: block;
+  margin: 5px 0 5px 0!important;
+  text-align: center!important;
   font-family: Montserrat;
   font-weight: bold;
 }
