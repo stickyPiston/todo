@@ -4,6 +4,7 @@ html, body {
   margin: 0;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 @font-face {
@@ -56,7 +57,7 @@ ul > li > button.delete {
 form {
   display: block;
   margin: 0 auto;
-  width: 300px;
+  width: 400px;
 }
 
 form > input[type="text"] {

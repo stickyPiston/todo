@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { ipcRenderer } = require('electron')
+
 const showdown = require('showdown')
 var converter = new showdown.Converter({
   simplifiedAutoLink: true,
@@ -9,10 +10,21 @@ var converter = new showdown.Converter({
   ghMentions: true
 })
 
-var input = document.getElementById('input')
+var input = document.getElementById('inputItem')
 var list = document.getElementById('list')
 
-function createItem (text, done, isHTML) {
+var categories = []
+
+var selectValue = 'None'
+
+function getDocumentHeight () {
+  var body = document.body
+  var html = document.documentElement
+
+  return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
+}
+
+function createItem (text, done, isHTML = false, category = false) {
   var newNode = document.createElement('li')
   var spanNode = document.createElement('span')
   var checkboxNode = document.createElement('input')
@@ -30,7 +42,7 @@ function createItem (text, done, isHTML) {
 
   deleteBtn.addEventListener('click', e => {
     e.target.parentElement.parentElement.removeChild(e.target.parentElement)
-    ipcRenderer.send('heightChanged', document.getElementsByTagName('li').length)
+    ipcRenderer.send('heightChanged', getDocumentHeight())
     SaveList()
   })
 
@@ -50,23 +62,65 @@ function createItem (text, done, isHTML) {
   newNode.appendChild(separator)
   newNode.appendChild(deleteBtn)
   newNode.style.textDecoration = done ? 'line-through' : 'none'
-  list.appendChild(newNode)
+  category ? document.getElementById(category).appendChild(newNode) : list.appendChild(newNode)
+}
+
+function createCategory (name) {
+  var newListNode = document.createElement('ul')
+  var titleNode = document.createElement('strong')
+  var titleTextNode = document.createTextNode(name)
+
+  titleNode.appendChild(titleTextNode)
+  list.appendChild(titleNode)
+
+  newListNode.setAttribute('id', name)
+
+  list.appendChild(newListNode)
+
+  categories.push(name)
+
+  listCategories()
+}
+
+function publishList (data) {
+  data.forEach(element => {
+    if (element.category) {
+      createCategory(element.category)
+      element.content.forEach(item => {
+        createItem(item.text, item.done, true, element.category)
+      })
+    } else {
+      createItem(element.text, element.done, true)
+    }
+  })
 }
 
 function ListSave () {
   var save = fs.readFileSync(path.join(__dirname, 'save.json'))
   save = JSON.parse(save.toString())
-  save.forEach(element => {
-    createItem(element.data, element.done, true)
-  })
+  publishList(save)
+  ipcRenderer.send('heightChanged', getDocumentHeight())
 }
 
 function SaveList () {
   var data = []
 
-  Array.from(document.querySelectorAll('li > span:not(.seperator)')).forEach(element => {
-    var done = element.parentElement.style.textDecoration === 'line-through'
-    data.push({ 'data': element.innerHTML, 'done': done })
+  Array.from(list.children).forEach(element => {
+    if (element.localName === 'ul') {
+      var category = {}
+      category.category = element.id
+      category.content = []
+      Array.from(element.children).forEach(item => {
+        var text = item.querySelector('span:not(.seperator)').innerHTML
+        var done = item.querySelector('input[type="checkbox"]').checked
+        category.content.push({ 'text': text, 'done': done })
+      })
+      data.push(category)
+    } else if (element.localName === 'li') {
+      var text = element.querySelector('span:not(.seperator)').innerHTML
+      var done = element.querySelector('input[type="checkbox"]').checked
+      data.push({ 'text': text, 'done': done })
+    }
   })
 
   data = JSON.stringify(data)
@@ -78,12 +132,26 @@ function SaveList () {
 
 function EmptyList () {
   var list = document.getElementById('list')
-
   list.innerHTML = ''
+  ipcRenderer.send('heightChanged', getDocumentHeight())
 }
 
+function listCategories () {
+  var select = document.querySelector('select')
+  var htmlCode
+  htmlCode += '<option value="None">None</option>'
+  categories.forEach(element => {
+    htmlCode += '<option value="' + element + '">' + element + '</option>'
+  })
+  select.innerHTML = htmlCode
+}
+
+document.querySelector('select').addEventListener('change', e => {
+  selectValue = e.target.value
+})
+
 // If form is submitted
-document.getElementsByTagName('form')[0].addEventListener('submit', e => {
+document.getElementById('createItem').addEventListener('submit', e => {
   e.preventDefault()
   EmptyList()
 
@@ -91,10 +159,10 @@ document.getElementsByTagName('form')[0].addEventListener('submit', e => {
   ListSave()
 
   // Convert input value to html and add it to the list
-  createItem(input.value)
+  createItem(input.value, false, false, selectValue)
 
   // Update height
-  ipcRenderer.send('heightChanged', document.getElementsByTagName('li').length)
+  ipcRenderer.send('heightChanged', getDocumentHeight())
 
   // Empty input
   input.value = ''
@@ -103,6 +171,20 @@ document.getElementsByTagName('form')[0].addEventListener('submit', e => {
   SaveList()
 })
 
+document.getElementById('createCategory').addEventListener('submit', e => {
+  e.preventDefault()
+
+  var inputValue = document.getElementById('inputCategory').value
+
+  createCategory(inputValue)
+
+  SaveList()
+})
+
 ListSave()
 
-ipcRenderer.send('heightChanged', document.getElementsByTagName('li').length)
+document.addEventListener('DOMContentLoaded', () => {
+  ipcRenderer.send('heightChanged', getDocumentHeight())
+
+  listCategories()
+})
