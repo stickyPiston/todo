@@ -1,7 +1,7 @@
 {
   "name": "todo",
   "version": "1.0.0",
-  "description": "Quick todo app",
+  "description": "📝 A very simple todo list application",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
