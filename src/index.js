@@ -97,7 +97,11 @@ function publishList (data) {
 
 function ListSave () {
   var save = fs.readFileSync(path.join(__dirname, 'save.json'))
-  save = JSON.parse(save.toString())
+  try {
+    save = JSON.parse(save.toString())
+  } catch (error) {
+    SaveList()
+  }
   publishList(save)
   ipcRenderer.send('heightChanged', getDocumentHeight())
 }
