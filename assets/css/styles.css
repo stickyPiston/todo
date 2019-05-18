@@ -1,15 +1,17 @@
 /* General styles */
+@import url("Open\ Sans.css");
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Bold.otf") format('opentype');
+}
 
 html, body {
   margin: 0;
   height: 100%;
   width: 100%;
   overflow: hidden;
-}
-
-@font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/Montserrat-Bold.otf") format('opentype');
+  font-family: "Open Sans", sans-serif;
 }
 
 p {
@@ -54,10 +56,21 @@ ul > li > button.delete {
 
 /* Add input styles */
 
-form {
+h3 {
+  margin: 0;
+  text-align: center
+}
+
+form#createItem {
   display: block;
   margin: 0 auto;
-  width: 400px;
+  width: 360px;
+}
+
+form#createCategory {
+  display: block;
+  margin: 0 auto;
+  width: 300px;
 }
 
 form > input[type="text"] {

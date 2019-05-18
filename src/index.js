@@ -77,7 +77,14 @@ function createCategory (name) {
 
   list.appendChild(newListNode)
 
-  categories.push(name)
+  var notFound = true
+  categories.forEach(element => {
+    if (element === name) {
+      notFound = false
+    }
+  })
+
+  if (notFound) categories.push(name)
 
   listCategories()
 }
@@ -142,8 +149,7 @@ function EmptyList () {
 
 function listCategories () {
   var select = document.querySelector('select')
-  var htmlCode
-  htmlCode += '<option value="None">None</option>'
+  var htmlCode = '<option value="None">None</option>'
   categories.forEach(element => {
     htmlCode += '<option value="' + element + '">' + element + '</option>'
   })
@@ -163,7 +169,7 @@ document.getElementById('createItem').addEventListener('submit', e => {
   ListSave()
 
   // Convert input value to html and add it to the list
-  createItem(input.value, false, false, selectValue)
+  createItem(input.value, false, false, selectValue === 'None' ? false : selectValue)
 
   // Update height
   ipcRenderer.send('heightChanged', getDocumentHeight())
@@ -178,11 +184,15 @@ document.getElementById('createItem').addEventListener('submit', e => {
 document.getElementById('createCategory').addEventListener('submit', e => {
   e.preventDefault()
 
-  var inputValue = document.getElementById('inputCategory').value
+  var categoryInput = document.getElementById('inputCategory')
+
+  var inputValue = categoryInput.value
 
   createCategory(inputValue)
 
   SaveList()
+
+  categoryInput.value = ''
 })
 
 ListSave()

@@ -67,7 +67,7 @@ function createWindow () {
   })
 
   ipcMain.on('heightChanged', (_event, arg) => {
-    win.setSize(win.getSize()[0], arg + 30, true)
+    win.setSize(win.getSize()[0], arg + 100, true)
   })
 }
 
