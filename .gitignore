@@ -72,4 +72,3 @@ ts-gen
 
 electron-builder.yml
 src/save.json
-*.json
