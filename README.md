@@ -1,4 +1,7 @@
 # todo
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/stickyPiston/todo.svg)](https://greenkeeper.io/)
+
 📝 A very simple todo list application.
 It's capabilities until now:
  - Add and delete items to the list
